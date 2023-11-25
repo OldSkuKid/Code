@@ -23,15 +23,24 @@ def checkDigit(staff_number,order_number,alphabet):
 # Testing, checkDigit()
 #print(checkDigit(123456,567878,'B'))
 
-# Function 2 Cost Verification Procedure: (ask professor)
-def costVerificationProcedure(discount_1, discount_2):
-    if discount_1 != 0:
-        if sub_total >= 500 and num_of_items <= 9:
-            delivery_fees = 0
-        else:
-            delivery_fees = 50
-    elif discount_2 != 0:
-        sub_total = sub_total * 0.95
+# Function 2, Cost Verification Procedure (ask professor)
+def Cost_Verification_Procedure(items, discount_1, discount_2):
+    sub_total = 0
+    discount = 0
+    # calculate the sub_total
+    for item in len(items):
+        sub_total += item[1] * item[2]
+
+    # calculate the total discount
+    discount += sub_total * discount_1
+    discount += sub_total * discount_2
+
+    # calculate the delivery_fees
+    if sub_total >= 500:
+        delivery_fees = 0
+    else: delivery_fees = 50
+
+    return sub_total - discount + delivery_fees
 
 
 # Function 3 Hash Toal:
