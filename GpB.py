@@ -66,4 +66,39 @@ def mallDollar(total):
     else:
         mall_dollar = 0
     return mall_dollar
-  
+
+# input for each order
+def order_input():
+  global a, b, c, d, e, f, g, h, items
+  itemNum = 4
+  discount_1 = 1 / 100
+  discount_2 = 5 / 100
+  for item in itemNum:
+      items[item][0] = input("Input item no: ")
+      items[item][1] = input("Input qty:")
+      items[item][2] = input("Input cost: ")
+  total = Cost_Verification_Procedure(items, discount_1, discount_2)
+
+# main program
+try:
+    while True:
+        ordersNum = int(input("Number of orders (1-15): "))
+        if ordersNum >= 1 and ordersNum <= 15:
+            break
+        print("Range from 1 to 15. Input again.")
+except:
+    print("Please enter a number.")
+else:
+    for i in range():
+        order_input()
+        
+# read csv file
+"""
+with open('ItemFile.csv', encoding="utf-8-sig") as item:
+    csv_reader = csv.reader(item)
+    # skip the header
+    next(csv_reader)
+    for line in csv_reader:
+        sub_total += float(line[3])
+"""
+
