@@ -16,9 +16,6 @@ def checkDigit(staff_number,order_number,alphabet):
     result = 0
     for i in range(len(staff_number)):
         result += int(staff_number[i]) * int(order_number[i])
-#    while check_digit % modulus != 0:
-#        check_digit += 1
-#        check_digit_1 += 1
     return modulus - (result % modulus)
 # Testing, checkDigit()
 #print(checkDigit(123456,567878,'B'))
@@ -42,8 +39,7 @@ def Cost_Verification_Procedure(items, discount_1, discount_2):
 
     return sub_total - discount + delivery_fees
 
-
-# Function 3 Hash Toal:
+# Function 3 Hash Total:
 # last two digital of the order number:
 def hashTotal(item_numbers):
     total = 0
