@@ -83,11 +83,13 @@ def order_input():
 try:
     while True:
         ordersNum = int(input("Number of orders (1-15): "))
-        if ordersNum >= 1 and ordersNum <= 15:
-            break
-        print("Range from 1 to 15. Input again.")
+        if type(ordersNum) == int:
+            if ordersNum >= 1 and ordersNum <= 15:
+                break
+            print("Range from 1 to 15. Input again.")
+        else: print("Please enter a number.")
 except:
-    print("Please enter a number.")
+    print("Unknown error occur.")
 else:
     for i in range():
         order_input()
