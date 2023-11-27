@@ -1,5 +1,6 @@
-import pandas as pd
 import datetime as dt
+import csv
+import random
 
 #1. Function 1, Check Digit
 def checkDigit(staff_number,order_number,alphabet):
@@ -74,7 +75,38 @@ def order_input():
       items[item][1] = input("Input qty:")
       items[item][2] = input("Input cost: ")
   total = Cost_Verification_Procedure(items, discount_1, discount_2)
+  
+# Function 5, arbitrary assigned the customer name and adress with condition statement within the function
+def name_adress(customer_number):
+    with open('CustomerAddress.csv', encoding="utf-8-sig") as customer:
+        csv_reader = csv.reader(customer)
+        # skip the header
+        next(csv_reader)
+        for line in csv_reader:
+            if int(line[0]) == customer_number:
+                customer_name = line[1]
+                customer_address = line[2]
+                return customer_name, customer_address
+            else:
+                #add new customer, save into the csv and genereate a new customer number to the customer
+                customer_name = input("Please input the customer name: ")
+                customer_address = input("Please input the customer address: ")
+                #generate random a new customer number 6 ditgis
+                customer_number = random.randint(100000,999999)
+                #save into the csv
+                with open('CustomerAddress.csv', 'a', newline='') as customer:
+                    csv_writer = csv.writer(customer)
+                    csv_writer.writerow([customer_number, customer_name, customer_address])
+# Testing, name_adress()    
+print(name_adress(123456))
+            
+            
+            
+            
+    
 
+name_adress(987654)
+    
 # main program
 try:
     while True:
@@ -89,6 +121,8 @@ except:
 else:
     for i in range():
         order_input()
+        
+
         
 # read csv file
 """
