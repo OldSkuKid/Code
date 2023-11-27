@@ -65,16 +65,45 @@ def mallDollar(total):
     return mall_dollar
 
 # input for each order
+# def order_input():
+#   global a, b, c, d, e, f, g, h, items
+#   itemNum = 4
+#   discount_1 = 1 / 100
+#   discount_2 = 5 / 100
+#   for item in itemNum:
+#       items[item][0] = input("Input item no: ")
+#       items[item][1] = input("Input qty:")
+#       items[item][2] = input("Input cost: ")
+#   total = Cost_Verification_Procedure(items, discount_1, discount_2)
+  
+  # input for each order, each order must less than or equal to 9 items: 
 def order_input():
-  global a, b, c, d, e, f, g, h, items
-  itemNum = 4
-  discount_1 = 1 / 100
-  discount_2 = 5 / 100
-  for item in itemNum:
-      items[item][0] = input("Input item no: ")
-      items[item][1] = input("Input qty:")
-      items[item][2] = input("Input cost: ")
-  total = Cost_Verification_Procedure(items, discount_1, discount_2)
+    # ask the users to input the item number, quantity and price
+    # create a temp item_list, if the number of item is more than 9, go to next oder
+    item_list = []
+    item_number = input("Input an item number (or 'q' to quit): ")
+    while item_number != 'q' and len(item_list) <= 9:
+        item_list.append(item_number)
+        item_number = input("Input an item number (or 'q' to quit): ")
+    # if the number of item is more than 9, then cauculate the total
+    if len(item_list) > 9:
+        sub_total = Cost_Verification_Procedure(items, discount_1, discount_2)
+        hash_total = hashTotal(item_list)
+        print("Hash Total: ", hash_total)
+        print("Sub Total: ", sub_total)
+    else:
+        # if the number of item is less than 9, then ask the user if it is enough for this order
+        enough = input("Is it enough for this order? (y/n)")
+        if enough == 'y':
+            # if the user said it is enough, then calculate the total
+            sub_total = Cost_Verification_Procedure(items, discount_1, discount_2)
+            hash_total = hashTotal(item_list)
+            print("Hash Total: ", hash_total)
+            print("Sub Total: ", sub_total)
+        else:
+            return
+        ## needed to be adjusted and continue
+
   
 # Function 5, arbitrary assigned the customer name and adress with condition statement within the function
 def name_adress(customer_number):
@@ -86,7 +115,7 @@ def name_adress(customer_number):
             if int(line[0]) == customer_number:
                 customer_name = line[1]
                 customer_address = line[2]
-                return customer_name, customer_address
+                return customer_number,customer_name, customer_address
             else:
                 #add new customer, save into the csv and genereate a new customer number to the customer
                 customer_name = input("Please input the customer name: ")
@@ -97,16 +126,10 @@ def name_adress(customer_number):
                 with open('CustomerAddress.csv', 'a', newline='') as customer:
                     csv_writer = csv.writer(customer)
                     csv_writer.writerow([customer_number, customer_name, customer_address])
-# Testing, name_adress()    
-print(name_adress(123456))
-            
-            
-            
-            
+                    # stop the loop and return the customer name and address
+                    return customer_name, customer_address
     
-
-name_adress(987654)
-    
+name_adress(123456)
 # main program
 try:
     while True:
