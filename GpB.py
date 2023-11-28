@@ -97,7 +97,17 @@ def order_input():
     for zeroNum in range(6 - len(num_part)): # make sure 6 digit
         num_part = "0" + num_part
     new_order_no = alphabet + str("-") + num_part
-        
+    
+    # Input staff number
+    while True:
+        try:
+            staff_number = input("Enter your staff number(6 digit): ")
+            staff_number = int(staff_number)
+            if len(staff_number) == 6:
+                break
+            print("Staff number should in 6 digit. Enter again.")
+        except:
+            print("Please enter a number.")
             
     # ask the users to input the item number, quantity and price
     # create a temp item_list, if the number of item is more than 9, go to next oder
