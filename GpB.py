@@ -76,8 +76,29 @@ def mallDollar(total):
 #       items[item][2] = input("Input cost: ")
 #   total = Cost_Verification_Procedure(items, discount_1, discount_2)
   
-  # input for each order, each order must less than or equal to 9 items: 
+# input for each order, each order must less than or equal to 9 items: 
 def order_input():
+    # Determine the order number from the order file
+    # First, get the last order number
+    with open('OrderFile.csv', encoding="utf-8-sig") as orders:
+        csv_reader = csv.reader(orders)
+        next(csv_reader) # skip the header
+        for line in csv_reader:
+            last_order_no = line[0]
+    # Then, get the new order number
+    alphabet = last_order_no[0]
+    num_part = str(int(last_order_no[-6:]) + 1)
+    if len(num_part) > 6:
+        if alphabet == "Z": # If Z encountered change to A
+            alphabet = chr(ord(alphabet)-25)
+        else: # Next Letter in alphabet
+            alphabet = chr(ord(alphabet) + 1)
+        num_part = "000000"
+    for zeroNum in range(6 - len(num_part)): # make sure 6 digit
+        num_part = "0" + num_part
+    new_order_no = alphabet + str("-") + num_part
+        
+            
     # ask the users to input the item number, quantity and price
     # create a temp item_list, if the number of item is more than 9, go to next oder
     item_list = []
@@ -85,6 +106,7 @@ def order_input():
     while item_number != 'q' and len(item_list) <= 9:
         item_list.append(item_number)
         item_number = input("Input an item number (or 'q' to quit): ")
+
     # if the number of item is more than 9, then cauculate the total
     if len(item_list) > 9:
         sub_total = Cost_Verification_Procedure(items, discount_1, discount_2)
