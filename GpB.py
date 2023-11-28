@@ -4,6 +4,15 @@ import random
 
 # 1, Check Digit
 def checkDigit(staff_number,order_number,alphabet):
+    modulus = input_alphabet(alphabet)
+    staff_number = str(staff_number)
+    order_number = str(order_number)
+    result = 0
+    for i in range(len(staff_number)):
+        result += int(staff_number[i]) * int(order_number[i])
+    return modulus - (result % modulus)
+# 2, Input Alphabet
+def input_alphabet(alphabet):
     if alphabet == 'A':
         modulus = 9
     elif alphabet == 'B':
@@ -12,12 +21,10 @@ def checkDigit(staff_number,order_number,alphabet):
         modulus = 7
     elif alphabet == 'D':
         modulus = 6
-    staff_number = str(staff_number)
-    order_number = str(order_number)
-    result = 0
-    for i in range(len(staff_number)):
-        result += int(staff_number[i]) * int(order_number[i])
-    return modulus - (result % modulus)
+    else:
+        print("Invalid alphabet. Enter again.")
+    return modulus
+    
 
 def cal_sub_total(items):
     sub_total = 0
@@ -25,7 +32,7 @@ def cal_sub_total(items):
         sub_total += item[3]
     return sub_total
 
-# 2, Cost Verification Procedure
+# 3, Cost Verification Procedure
 def Cost_Verification_Procedure(items, discount_1, discount_2):
     discount = 0
     sub_total = cal_sub_total(items)
@@ -41,7 +48,7 @@ def Cost_Verification_Procedure(items, discount_1, discount_2):
 
     return sub_total - discount + delivery_fees
 
-# 3, Hash Total:
+# 4, Hash Total:
 # last two digital of the order number:
 def hashTotal(item_numbers):
     total = 0
@@ -189,6 +196,28 @@ def order_input():
 
     return [new_order_no, hash_total, total]
 
+# output audited format file:
+def audtied_format_file(order_list, staff_number, alphabet):
+    # print toal number of orders
+    print("Total number of orders: " + str(len(order_list)))
+    #print total hash number of all orders
+    print("Total hash number of all orders: " + str(sum(hash_total_list)))
+    # loop each order in the order list
+    modulus = input_alphabet(alphabet)
+    for order in order_list:
+        #print order number
+        print("Order number: " + order[0])
+        #print staff number
+        print("Staff number: " + str(staff_number))
+        #print user 'modulus number'
+        print("User 'modulus number: " + str(checkDigit(staff_number, order[0], modulus)))
+        #print sub toal
+        print("Sub total: " + str(order[2]))
+        # print hash total
+        print("Hash total: " + str(order[1]))
+        print()
+        
+
 # arbitrary assigned the customer name and address with condition statement within the function
 def name_address(customer_number):
     with open('CustomerAddress.csv', encoding="utf-8-sig") as customer:
@@ -216,6 +245,9 @@ def name_address(customer_number):
                     return customer_name, customer_address    
 # name_address(123456)
 
+
+
+
 # main program
 global ordersNum
 global hash_total_list
@@ -235,3 +267,6 @@ for i in range(ordersNum):
     order_list.append(order_input())
     print() # Empty line
     # output()
+
+
+
