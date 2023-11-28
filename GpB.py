@@ -11,6 +11,7 @@ def checkDigit(staff_number,order_number,alphabet):
     for i in range(len(staff_number)):
         result += int(staff_number[i]) * int(order_number[i])
     return modulus - (result % modulus)
+
 # 2, Input Alphabet
 def input_alphabet(alphabet):
     if alphabet == 'A':
@@ -65,6 +66,32 @@ def mallDollar(total):
         mall_dollar = 0
     return mall_dollar
   
+# arbitrary assigned the customer name and address with condition statement within the function
+def name_address(customer_number):
+    with open('CustomerAddress.csv', encoding="utf-8-sig") as customer:
+        csv_reader = csv.reader(customer)
+        next(csv_reader) # skip the header
+        for line in csv_reader:
+            if int(line[0]) == customer_number:
+                customer_name = line[1]
+                customer_address = line[2]
+                return customer_number, customer_name, customer_address
+            else:
+                #add new customer, save into the csv and genereate a new customer number to the customer
+                customer_name = input("Please input the customer name: ")
+                customer_address = input("Please input the customer address: ")
+
+                #generate random a new customer number 6 digits
+                """ IT WILL POSSIBLE CAUSE TO DUPLICATE CUSTOMER NUMBER """
+                customer_number = random.randint(100000,999999)
+
+                #save into the csv
+                with open('CustomerAddress.csv', 'a', newline='') as customer:
+                    csv_writer = csv.writer(customer)
+                    csv_writer.writerow([customer_number, customer_name, customer_address])
+                    # stop the loop and return the customer name and address
+                    return customer_name, customer_address   
+
 # input for each order,
 def order_input():
     # Determine the order number from the order file
@@ -98,6 +125,9 @@ def order_input():
         except:
             print("Please enter a number.")
             
+    # modulus number
+    alphabet = input("Enter alphabet(A, B, C, D): ")
+
     # Input numbers of items within the order 
     global ordersNum
     while True:
@@ -194,59 +224,33 @@ def order_input():
     # order total payment
     total = Cost_Verification_Procedure(item_list, discount_1, discount_2)
 
-    return [new_order_no, hash_total, total]
+    return [new_order_no, staff_number, alphabet, sub_total, total, hash_total, item_list]
+
 
 # output audited format file:
-def audtied_format_file(order_list, staff_number, alphabet):
-    # print toal number of orders
-    print("Total number of orders: " + str(len(order_list)))
-    #print total hash number of all orders
-    print("Total hash number of all orders: " + str(sum(hash_total_list)))
-    # loop each order in the order list
-    modulus = input_alphabet(alphabet)
-    for order in order_list:
-        #print order number
-        print("Order number: " + order[0])
-        #print staff number
-        print("Staff number: " + str(staff_number))
-        #print user 'modulus number'
-        print("User 'modulus number: " + str(checkDigit(staff_number, order[0], modulus)))
-        #print sub toal
-        print("Sub total: " + str(order[2]))
-        # print hash total
-        print("Hash total: " + str(order[1]))
-        print()
-        
+def audited_format_file(order_list):
+    with open('last_order_file.txt', 'w') as f:
+    # write total number of orders
+        f.write("Number_of_orders", str(len(order_list)))
+    # write total hash of all orders
+        f.write("Hash_total_of_all_orders", str(sum(hash_total_list)))
 
-# arbitrary assigned the customer name and address with condition statement within the function
-def name_address(customer_number):
-    with open('CustomerAddress.csv', encoding="utf-8-sig") as customer:
-        csv_reader = csv.reader(customer)
-        next(csv_reader) # skip the header
-        for line in csv_reader:
-            if int(line[0]) == customer_number:
-                customer_name = line[1]
-                customer_address = line[2]
-                return customer_number, customer_name, customer_address
-            else:
-                #add new customer, save into the csv and genereate a new customer number to the customer
-                customer_name = input("Please input the customer name: ")
-                customer_address = input("Please input the customer address: ")
-
-                #generate random a new customer number 6 digits
-                """ IT WILL POSSIBLE CAUSE TO DUPLICATE CUSTOMER NUMBER """
-                customer_number = random.randint(100000,999999)
-
-                #save into the csv
-                with open('CustomerAddress.csv', 'a', newline='') as customer:
-                    csv_writer = csv.writer(customer)
-                    csv_writer.writerow([customer_number, customer_name, customer_address])
-                    # stop the loop and return the customer name and address
-                    return customer_name, customer_address    
-# name_address(123456)
-
-
-
+        # loop each order in the order list
+        i = 0
+        for order in order_list:
+            i += 1
+            f.write("Order", i, "details")
+            #print order number
+            f.write("Order_Number: " + order[0])
+            #print staff number
+            f.write("Agency_number", order[1] )
+            #print user 'modulus number'
+            f.write("Modulus_number", checkDigit(order[1], order[0], order[2])))
+            #print sub total
+            f.write("Total" + str(order[3]))
+            # print hash total
+            f.write("Hash_total" + str(order[5]))
+            f.write()
 
 # main program
 global ordersNum
@@ -266,7 +270,8 @@ for i in range(ordersNum):
     print("Order " + str(i+1) + " input,\n")
     order_list.append(order_input())
     print() # Empty line
-    # output()
-
+# output()
+invoice(order_list)
+audited_format_file(order_list)
 
 
