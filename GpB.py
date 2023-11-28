@@ -111,6 +111,26 @@ def order_input():
             
     # ask the users to input the item number, quantity and price
     # create a temp item_list, if the number of item is more than 9, go to next oder
+    # Input numbers of items within the order 
+    global ordersNum
+    while True:
+        try:
+            numberOFItems = input("Enter number of items within this order (or 'q' to quit): ")
+            numberOFItems = int(numberOFItems)
+            if numberOFItems > 9:
+                if ordersNum == 15:
+                    print("The number of orders is 15.")
+                    print("You are not allow to create another order.")
+                    print("Enter number of items within 9 again.")
+                else:
+                    print("The number of items more than 9. Another order will be created.")
+                    ordersNum += 1
+                    break
+            elif numberOFItems <= 0:
+                print("The number of items should not be 0 or less than 0. Enter again.")
+            else: break
+        except:
+            print("Please enter a number.")
     item_list = []
     item_number = input("Input an item number (or 'q' to quit): ")
     while item_number != 'q' and len(item_list) <= 9:
