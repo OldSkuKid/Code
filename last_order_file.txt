@@ -1,7 +1,3 @@
-Number_of_orders: 1
-Hash_total_of_all_orders: 34
-
-Order 1 details
 Order_Number: A-000022
 Agency_number: 123456
 Modulus_number: 9

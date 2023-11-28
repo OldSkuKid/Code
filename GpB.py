@@ -251,7 +251,7 @@ def order_input():
             else: break
         except:
             print("Invalid amount of discount. Enter again.")
-            
+    #input the customer number
     while True:
         try:
             #call the name_address function to get the customer name and address
@@ -304,6 +304,16 @@ def invoice(order_list):
             print("%-40s %-25s  $ %-30.2f" % (" ", "Delivery Fee", float(delivery_fee)))
         print("%-40s %-25s  $ %-30.2f" % (" ", "Total", float(order[4])))
         print("\n")
+            # Save as CSV
+        with open("sampleInvoice.csv", mode="w", newline="") as file:
+            writer = csv.writer(file)
+            writer.writerow(["Invoice Date", "Order No.", "Mall Dollar", "Qty", "Total", "Shipping To", "SubTotal", "VIP", "VIPDAY95", "Delivery Fee", "Total"])
+            for order in order_list:
+                orderNo = order[0][0] + str(order[1]) + str(order[2]) + order[0][-6:] + str(order[6]) + "(" + str(checkDigit(order[1], order[0], order[2])) + ")"
+                writer.writerow([
+                    str(dt.date.today()), orderNo, float(mallDollar(order[4])),
+                     ,float(order[4])
+                ])
 
 # 6, Output audit file
 def audited_format_file(order_list):
