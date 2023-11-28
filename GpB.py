@@ -121,30 +121,52 @@ def order_input():
             else: break
         except:
             print("Please enter a number.")
-    item_list = []
-    item_number = input("Input an item number (or 'q' to quit): ")
-    while item_number != 'q' and len(item_list) <= 9:
-        item_list.append(item_number)
-        item_number = input("Input an item number (or 'q' to quit): ")
 
-    # if the number of item is more than 9, then cauculate the total
-    if len(item_list) > 9:
-        sub_total = Cost_Verification_Procedure(items, discount_1, discount_2)
-        hash_total = hashTotal(item_list)
-        print("Hash Total: ", hash_total)
-        print("Sub Total: ", sub_total)
-    else:
-        # if the number of item is less than 9, then ask the user if it is enough for this order
-        enough = input("Is it enough for this order? (y/n)")
-        if enough == 'y':
-            # if the user said it is enough, then calculate the total
-            sub_total = Cost_Verification_Procedure(items, discount_1, discount_2)
-            hash_total = hashTotal(item_list)
-            print("Hash Total: ", hash_total)
-            print("Sub Total: ", sub_total)
-        else:
-            return
-        ## needed to be adjusted and continue
+    # Input item number, quantity and price
+    item_list = [] # create a list, for recording item in the order
+    # fill item_list
+    while True:
+        item_number = input("Enter an item number (or 'q' to quit): ")
+        isExist = False
+        if len(item_list) == numberOFItems:
+            break
+        if item_number == 'q':   
+            # if the number of item is less than number of items, 
+            # then ask the user to confirm for ending input the order
+            confirm = input("Confirm for ending this order? (y/n)  ")
+            if confirm == 'y':
+                break
+            
+        # check if the item exist
+        with open('ItemFile.csv', encoding="utf-8-sig") as ItemFile:
+            csv_reader = csv.reader(ItemFile)
+            next(csv_reader) # skip the header
+            for line in csv_reader:
+                if item_number == line[0]:
+                    item_list.append(line)
+                    while True:
+                        try:
+                            quantity_number = input("Enter the quantity number of the item: ")
+                            quantity_number = int(quantity_number)
+                            if quantity_number <= 0:
+                                print("Quantity number should not be 0 or negative.")
+                                continue
+                        except:
+                            print("Invalid number.")
+                        else:
+                            break
+                    item_list.append([line[0], line[1], quantity_number, quantity_number * line[2]])
+                    isExist = True
+                    break
+            if not isExist:
+                print("Failed to find the item.")
+
+    # calculate the total
+    sub_total = Cost_Verification_Procedure(items, discount_1, discount_2)
+    hash_total = hashTotal(item_list)
+    print("Hash Total: ", hash_total)
+    print("Sub Total: ", sub_total)
+
 
   
 # Function 5, arbitrary assigned the customer name and adress with condition statement within the function
@@ -173,6 +195,7 @@ def name_adress(customer_number):
 # name_adress(123456)
 
 # main program
+global ordersNum
 while True:
     try:
         ordersNum = input("Number of orders (1-15): ")
