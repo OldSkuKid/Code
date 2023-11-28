@@ -1,5 +1,9 @@
 Orderno,Name,qty,price
-A00001,AI_Tone Shampoo,4,108
-A00002,BTM Baby Powder,4,892
-
-
+A-000001,AI_Tone Shampoo,4,108
+A-000002,BTM Baby Powder,4,892
+A-000002,KF-95 Anti-Cpvid Mask,1,280
+A-000002,Covid-19 Test kit,1,52.9
+A-000003,Covid-19 Test kit,2,105.8
+A-000003,BTM Baby Powder,4,792
+A-000003,KF-95 Anti-Cpvid Mask,1,280
+A-000003,AI_Tone Shampoo,2,54
