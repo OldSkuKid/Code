@@ -294,6 +294,7 @@ def invoice(order_list):
         print("\n")
 
 
+
 # 6, Output audit file
 def audited_format_file(order_list):
     with open('audited_file.txt', 'w') as f:
@@ -319,6 +320,22 @@ def audited_format_file(order_list):
             f.write("Hash_total: " + str(order[5]) + "\n")
             f.write("\n")
 
+def last_order_file(order_list):
+    with open('last_order_file.txt', 'w') as f:
+        for order_no in order_list:
+            order = order_no
+        # print order number
+        f.write("Order_Number: " + str(order[0] + "\n"))
+        # print staff number
+        f.write("Agency_number: " + str(order[1]) + "\n")
+        # print user 'modulus number'
+        f.write("Modulus_number: " + str(order[13]) + "\n")
+        # print sub total
+        f.write("Total: " + str(order[3]) + "\n")
+        # print hash total
+        f.write("Hash_total: " + str(order[5]) + "\n")
+        f.write("\n")
+
 # main program
 global ordersNum
 global hash_total_list
@@ -342,5 +359,6 @@ for i in range(ordersNum):
 # output()
 invoice(order_list)
 audited_format_file(order_list)
+last_order_file(order_list)
 
 
