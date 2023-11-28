@@ -297,7 +297,7 @@ def invoice(order_list):
         # record the order in csv format
         with open('OrderFile.csv', 'a', newline='') as customer:
             csv_writer = csv.writer(customer)
-            csv_writer.writerow([order_list[0], order_list[1], modulus_number, order[4], order[5]])
+            csv_writer.writerow([order[0], order[1], modulus_number, order[4], order[5]])
 
 # 6, Output audit file
 def audited_format_file(order_list):
