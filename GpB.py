@@ -288,21 +288,21 @@ def invoice(order_list):
         print("INVOICE")
         print("%-30s %-30s  %-30s" % ("Invoice Date", "Order No.", "Mall Dollar"))
         orderNo = order[0][0] + str(order[1]) + str(order[2]) + order[0][-6:] + str(order[6]) + "(" + modulus_number + ")"
-        print("%-30s %-30s  $%-29.2f" % (str(dt.date.today()), orderNo, mallDollar(order[4])))
+        print("%-30s %-30s  $%-29.2f" % (str(dt.date.today()), orderNo, float(mallDollar(order[4]))))
         print("%-42s %-20s %-10s" % ("Description", "Qty", "Total"))
         print("Customer Number: " + str(order[10])) # customerNo
         for item in order[7]:
-            print("%-4s%-6s %-32s %-20s %-10s" % (item[0], ".", item[1], item[2], item[3]))
+            print("%-4s%-6s %-32s %-20s %-10.2f" % (item[0], ".", item[1], item[2], float(item[3])))
         print()
-        print("%-40s %-25s  $ %-30.2f" % ("Shipping To", "SubTotal", order[3]))
-        print("%-40s %-25s -$ %-30.2f" % ("Customer Name: " +str(order[11]) , "VIP", order[8]))
-        print("%-40s %-25s -$ %-30.2f" % ("Customer Address: " + str(order[12]), "VIPDAY95", order[9]*order[3]))
+        print("%-40s %-25s  $ %-30.2f" % ("Shipping To", "SubTotal", float(order[3])))
+        print("%-40s %-25s -$ %-30.2f" % ("Customer Name: " +str(order[11]) , "VIP", float(order[8])))
+        print("%-40s %-25s -$ %-30.2f" % ("Customer Address: " + str(order[12]), "VIPDAY95", float(order[9]*order[3])))
         delivery_fee = deliveryFee(order[3])
         if deliveryFee(order[3]) == 0: 
-            print("%-40s %-25s  %-30.2s" % (" ", "Delivery Fee", "FREE"))
+            print("%-40s %-25s  %-30s" % (" ", "Delivery Fee", "FREE"))
         else:
-            print("%-40s %-25s  $ %-30.2s" % (" ", "Delivery Fee", str(delivery_fee)))
-        print("%-40s %-25s  $ %-30.1f" % (" ", "Total", order[4]))
+            print("%-40s %-25s  $ %-30.2f" % (" ", "Delivery Fee", float(delivery_fee)))
+        print("%-40s %-25s  $ %-30.2f" % (" ", "Total", float(order[4])))
         print("\n")
 
 # 6, Output audit file

@@ -1,16 +1,9 @@
-Number_of_orders: 2
-Hash_total_of_all_orders: 55
+Number_of_orders: 1
+Hash_total_of_all_orders: 34
 
 Order 1 details
-Order_Number: A-000004
+Order_Number: A-000020
 Agency_number: 123456
-Modulus_number: 6
-Total: 108.0
-Hash_total: 21
-
-Order 2 details
-Order_Number: A-000004
-Agency_number: 223344
 Modulus_number: 9
 Total: 792.0
 Hash_total: 34
