@@ -48,6 +48,7 @@ def hashTotal(item_numbers):
         last_two_digits = int(item_number[-2:])
         total += last_two_digits
     return total
+
 # ask user to input the order number, if number of order is more than 15, then go to another hash total function:
 item_numbers = []
 item_number = input("Input an item number (or 'q' to quit): ")
@@ -109,7 +110,10 @@ def order_input():
                     print("You are not allow to create another order.")
                     print("Enter number of items within 9 again.")
                 else:
-                    print("The number of items more than 9. Another order will be created.")
+                    print("The number of items more than 9.")
+                    print("One order can only have at most 9 items")
+                    print("Another order will be created.")
+                    numberOFItems = 9
                     ordersNum += 1
                     break
             elif numberOFItems <= 0:
@@ -183,13 +187,3 @@ for i in range(ordersNum):
     order_input()
     print() # Empty line
     # output()
-        
-# read csv file
-"""
-with open('ItemFile.csv', encoding="utf-8-sig") as item:
-    csv_reader = csv.reader(item)
-    # skip the header
-    next(csv_reader)
-    for line in csv_reader:
-        sub_total += float(line[3])
-"""
