@@ -93,7 +93,7 @@ def order_input():
             alphabet = chr(ord(alphabet)-25)
         else: # Next Letter in alphabet
             alphabet = chr(ord(alphabet) + 1)
-        num_part = "000000"
+        num_part = "000001"
     for zeroNum in range(6 - len(num_part)): # make sure 6 digit
         num_part = "0" + num_part
     new_order_no = alphabet + str("-") + num_part
