@@ -154,15 +154,42 @@ def order_input():
             if not isExist:
                 print("Failed to find the item.")
 
-    # calculate the total
-    sub_total = Cost_Verification_Procedure(items, discount_1, discount_2)
-    hash_total = hashTotal(item_list)
-    print("Hash Total: ", hash_total)
-    print("Sub Total: ", sub_total)
+    # calculate the sub-total
+    sub_total = cal_sub_total(item_list)
 
+    # input the discount
+    while True:
+        try:
+            discount_1 = input("Enter the 1st discount of the order in dollar($) (if no, enter 0): ")
+            discount_1 = float(discount_1)
+            if discount_1 / sub_total >= 1 / 100:
+                print("Actual amount of discount can only be less than 1% of the sub-total.")
+            elif discount_1 < 0:
+                print("Discount can not be negative.")
+            else: break
+        except:
+            print("Invalid amount of discount. Enter again.")
+    while True:
+        try:
+            discount_2 = input("Enter the 2nd discount of the order in percentage(%) (0 to 5%): ")
+            discount_2 = float(discount_2) / 100
+            if discount_2 < 0 or discount_2 > 0.05:
+                print("Invalid amount of discount. Enter again.")
+            else: break
+        except:
+            print("Invalid amount of discount. Enter again.")
+
+    # hash total
+    global hash_total_list
+    hash_total = hashTotal(item_list)
+    hash_total_list.append(hash_total) # for calculate the new hash total
+
+    # order total payment
+    total = Cost_Verification_Procedure(item_list, discount_1, discount_2)
 
   
 # Function 5, arbitrary assigned the customer name and adress with condition statement within the function
+    return [new_order_no, hash_total, total]
 def name_adress(customer_number):
     with open('CustomerAddress.csv', encoding="utf-8-sig") as customer:
         csv_reader = csv.reader(customer)
