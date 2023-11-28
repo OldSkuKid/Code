@@ -216,6 +216,9 @@ def name_adress(customer_number):
 
 # main program
 global ordersNum
+global hash_total_list
+order_list = []
+hash_total_list = []
 while True:
     try:
         ordersNum = input("Number of orders (1-15): ")
@@ -226,7 +229,7 @@ while True:
     except:
         print("Please enter a number.")
 for i in range(ordersNum):
-    print("Order " + str(i+1) + " input:")
-    order_input()
+    print("Order " + str(i+1) + " input,\n")
+    order_list.append(order_input())
     print() # Empty line
     # output()
