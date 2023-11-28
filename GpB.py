@@ -165,25 +165,24 @@ def name_adress(customer_number):
                     csv_writer = csv.writer(customer)
                     csv_writer.writerow([customer_number, customer_name, customer_address])
                     # stop the loop and return the customer name and address
-                    return customer_name, customer_address
-    
-name_adress(123456)
-# main program
-try:
-    while True:
-        ordersNum = int(input("Number of orders (1-15): "))
-        if type(ordersNum) == int:
-            if ordersNum >= 1 and ordersNum <= 15:
-                break
-            print("Range from 1 to 15. Input again.")
-        else: print("Please enter a number.")
-except:
-    print("Unknown error occur.")
-else:
-    for i in range():
-        order_input()
-        
+                    return customer_name, customer_address    
+# name_adress(123456)
 
+# main program
+while True:
+    try:
+        ordersNum = input("Number of orders (1-15): ")
+        ordersNum = int(ordersNum)
+        if ordersNum >= 1 and ordersNum <= 15:
+            break
+        print("Range from 1 to 15. Input again.")
+    except:
+        print("Please enter a number.")
+for i in range(ordersNum):
+    print("Order " + str(i+1) + " input:")
+    order_input()
+    print() # Empty line
+    # output()
         
 # read csv file
 """
