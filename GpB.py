@@ -19,15 +19,19 @@ def checkDigit(staff_number,order_number,alphabet):
         result += int(staff_number[i]) * int(order_number[i])
     return modulus - (result % modulus)
 
-def Cost_Verification_Procedure(items, discount_1, discount_2):
+def cal_sub_total(items):
     sub_total = 0
-    discount = 0
-    # calculate the sub_total
     for item in len(items):
-        sub_total += item[1] * item[2]
+        sub_total += item[3]
+    return sub_total
+
+# 2, Cost Verification Procedure
+def Cost_Verification_Procedure(items, discount_1, discount_2):
+    discount = 0
+    sub_total = cal_sub_total(items)
 
     # calculate the total discount
-    discount += sub_total * discount_1
+    discount += discount_1
     discount += sub_total * discount_2
 
     # calculate the delivery_fees
