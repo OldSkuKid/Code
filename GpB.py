@@ -63,20 +63,8 @@ def mallDollar(total):
     else:
         mall_dollar = 0
     return mall_dollar
-
-# input for each order
-# def order_input():
-#   global a, b, c, d, e, f, g, h, items
-#   itemNum = 4
-#   discount_1 = 1 / 100
-#   discount_2 = 5 / 100
-#   for item in itemNum:
-#       items[item][0] = input("Input item no: ")
-#       items[item][1] = input("Input qty:")
-#       items[item][2] = input("Input cost: ")
-#   total = Cost_Verification_Procedure(items, discount_1, discount_2)
   
-# input for each order, each order must less than or equal to 9 items: 
+# input for each order,
 def order_input():
     # Determine the order number from the order file
     # First, get the last order number
@@ -109,8 +97,6 @@ def order_input():
         except:
             print("Please enter a number.")
             
-    # ask the users to input the item number, quantity and price
-    # create a temp item_list, if the number of item is more than 9, go to next oder
     # Input numbers of items within the order 
     global ordersNum
     while True:
