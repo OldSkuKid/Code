@@ -187,32 +187,34 @@ def order_input():
     # order total payment
     total = Cost_Verification_Procedure(item_list, discount_1, discount_2)
 
-  
-# Function 5, arbitrary assigned the customer name and adress with condition statement within the function
     return [new_order_no, hash_total, total]
-def name_adress(customer_number):
+
+# arbitrary assigned the customer name and address with condition statement within the function
+def name_address(customer_number):
     with open('CustomerAddress.csv', encoding="utf-8-sig") as customer:
         csv_reader = csv.reader(customer)
-        # skip the header
-        next(csv_reader)
+        next(csv_reader) # skip the header
         for line in csv_reader:
             if int(line[0]) == customer_number:
                 customer_name = line[1]
                 customer_address = line[2]
-                return customer_number,customer_name, customer_address
+                return customer_number, customer_name, customer_address
             else:
                 #add new customer, save into the csv and genereate a new customer number to the customer
                 customer_name = input("Please input the customer name: ")
                 customer_address = input("Please input the customer address: ")
-                #generate random a new customer number 6 ditgis
+
+                #generate random a new customer number 6 digits
+                """ IT WILL POSSIBLE CAUSE TO DUPLICATE CUSTOMER NUMBER """
                 customer_number = random.randint(100000,999999)
+
                 #save into the csv
                 with open('CustomerAddress.csv', 'a', newline='') as customer:
                     csv_writer = csv.writer(customer)
                     csv_writer.writerow([customer_number, customer_name, customer_address])
                     # stop the loop and return the customer name and address
                     return customer_name, customer_address    
-# name_adress(123456)
+# name_address(123456)
 
 # main program
 global ordersNum
