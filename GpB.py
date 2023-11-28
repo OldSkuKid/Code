@@ -84,12 +84,12 @@ def name_address(customer_number):
         while True:
             customer_number = random.randint(100000,999999)
             if customer_exists(customer_number) == None:
-                print("-Cusomter Number not exist.")
-                print("-Plase Eneter Customer Name and Address")
-                #add new customer, save into the csv and genereate a new customer number to the customer
+                print("-Customer Number not exist.")
+                print("-Please Enter Customer Name and Address")
+                #add new customer, save into the csv and generate a new customer number to the customer
                 customer_name = input("Please enter the customer name: ")
                 customer_address = input("Please input enter customer address: ")
-                print("A New Customer Number Will be Assgined.")
+                print("A New Customer Number Will be Assigned.")
                 break
         #save into the csv
         with open('CustomerAddress.csv', 'a', newline='') as customer:
@@ -272,10 +272,11 @@ def order_input():
 
 def invoice(order_list):
     for order in order_list:
+        modulus_number = str(checkDigit(order[1], order[0], order[2]))
         print("%-27s AI_Tone mall" % " ")
         print("INVOICE")
         print("%-30s %-30s  %-30s" % ("Invoice Date", "Order No.", "Mall Dollar"))
-        orderNo = order[0][0] + str(order[1]) + str(order[2]) + order[0][-6:] + str(order[6]) + "(" + str(checkDigit(order[1], order[0], order[2])) + ")"
+        orderNo = order[0][0] + str(order[1]) + str(order[2]) + order[0][-6:] + str(order[6]) + "(" + modulus_number + ")"
         print("%-30s %-30s  $%-29.2f" % (str(dt.date.today()), orderNo, mallDollar(order[4])))
         print("%-42s %-20s %-10s" % ("Description", "Qty", "Total"))
         print("Customer Number: " + str(order[10])) # customerNo
@@ -293,7 +294,10 @@ def invoice(order_list):
         print("%-40s %-25s  $ %-30.1f" % (" ", "Total", order[4]))
         print("\n")
 
-
+        # record the order in csv format
+        with open('OrderFile.csv', 'a', newline='') as customer:
+            csv_writer = csv.writer(customer)
+            csv_writer.writerow([order_list[0], order_list[1], modulus_number, order[4], order[5]])
 
 # 6, Output audit file
 def audited_format_file(order_list):
