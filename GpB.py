@@ -46,17 +46,9 @@ def Cost_Verification_Procedure(items, discount_1, discount_2):
 def hashTotal(item_numbers):
     total = 0
     for item_number in item_numbers:
-        last_two_digits = int(item_number[-2:])
+        last_two_digits = int(item_number[0][-2:])
         total += last_two_digits
     return total
-
-# ask user to input the order number, if number of order is more than 15, then go to another hash total function:
-item_numbers = []
-item_number = input("Input an item number (or 'q' to quit): ")
-while item_number != 'q' and len(item_numbers) <= 9:
-    item_numbers.append(item_number)
-    item_number = input("Input an item number (or 'q' to quit): ")
-print(hashTotal(item_numbers))
 
 # 5, mall dollar:
 def mallDollar(total):
