@@ -5,6 +5,7 @@ import random
 # 1, Check Digit
 def checkDigit(staff_number,order_number,alphabet):
     modulus = input_alphabet(alphabet)
+    order_number = order_number[-6:]
     staff_number = str(staff_number)
     order_number = str(order_number)
     result = 0
@@ -29,7 +30,7 @@ def input_alphabet(alphabet):
 
 def cal_sub_total(items):
     sub_total = 0
-    for item in len(items):
+    for item in items:
         sub_total += item[3]
     return sub_total
 
@@ -42,12 +43,15 @@ def Cost_Verification_Procedure(items, discount_1, discount_2):
     discount += discount_1
     discount += sub_total * discount_2
 
+    return sub_total - discount + deliveryFee(sub_total)
+
+def deliveryFee(sub_total):
     # calculate the delivery_fees
     if sub_total >= 500:
         delivery_fees = 0
     else: delivery_fees = 50
+    return delivery_fees
 
-    return sub_total - discount + delivery_fees
 
 # 4, Hash Total:
 # last two digital of the order number:
@@ -118,8 +122,8 @@ def order_input():
     while True:
         try:
             staff_number = input("Enter your staff number(6 digit): ")
-            staff_number = int(staff_number)
             if len(staff_number) == 6:
+                staff_number = int(staff_number)
                 break
             print("Staff number should in 6 digit. Enter again.")
         except:
@@ -132,17 +136,17 @@ def order_input():
     global ordersNum
     while True:
         try:
-            numberOFItems = input("Enter number of items within this order (or 'q' to quit): ")
+            numberOFItems = input("\nEnter number of items within this order (or 'q' to quit): ")
             numberOFItems = int(numberOFItems)
             if numberOFItems > 9:
                 if ordersNum == 15:
-                    print("The number of orders is 15.")
-                    print("You are not allow to create another order.")
-                    print("Enter number of items within 9 again.")
+                    print("-The number of orders is 15.")
+                    print("-You are not allow to create another order.")
+                    print("-Enter number of items within 9 again.")
                 else:
-                    print("The number of items more than 9.")
-                    print("One order can only have at most 9 items")
-                    print("Another order will be created.")
+                    print("-The number of items more than 9.")
+                    print("-One order can only have at most 9 items")
+                    print("-Another order will be created.")
                     numberOFItems = 9
                     ordersNum += 1
                     break
@@ -156,14 +160,14 @@ def order_input():
     item_list = [] # create a list, for recording item in the order
     # fill item_list
     while True:
-        item_number = input("Enter an item number (or 'q' to quit): ")
-        isExist = False
         if len(item_list) == numberOFItems:
             break
+        item_number = input("\nEnter an item number (or 'q' to quit): ")
+        isExist = False
         if item_number == 'q':   
             # if the number of item is less than number of items, 
             # then ask the user to confirm for ending input the order
-            confirm = input("Confirm for ending this order? (y/n)  ")
+            confirm = input("\nConfirm for ending this order? (y/n)  ")
             if confirm == 'y':
                 break
             
@@ -173,7 +177,6 @@ def order_input():
             next(csv_reader) # skip the header
             for line in csv_reader:
                 if item_number == line[0]:
-                    item_list.append(line)
                     while True:
                         try:
                             quantity_number = input("Enter the quantity number of the item: ")
@@ -185,7 +188,7 @@ def order_input():
                             print("Invalid number.")
                         else:
                             break
-                    item_list.append([line[0], line[1], quantity_number, quantity_number * line[2]])
+                    item_list.append([line[0], line[1], quantity_number, quantity_number * float(line[2])])
                     isExist = True
                     break
             if not isExist:
@@ -197,7 +200,7 @@ def order_input():
     # input the discount
     while True:
         try:
-            discount_1 = input("Enter the 1st discount of the order in dollar($) (if no, enter 0): ")
+            discount_1 = input("\nEnter the 1st discount of the order in dollar($) (if no, enter 0): ")
             discount_1 = float(discount_1)
             if discount_1 / sub_total >= 1 / 100:
                 print("Actual amount of discount can only be less than 1% of the sub-total.")
@@ -208,7 +211,7 @@ def order_input():
             print("Invalid amount of discount. Enter again.")
     while True:
         try:
-            discount_2 = input("Enter the 2nd discount of the order in percentage(%) (0 to 5%): ")
+            discount_2 = input("\nEnter the 2nd discount of the order in percentage(%) (0 to 5%): ")
             discount_2 = float(discount_2) / 100
             if discount_2 < 0 or discount_2 > 0.05:
                 print("Invalid amount of discount. Enter again.")
@@ -224,7 +227,31 @@ def order_input():
     # order total payment
     total = Cost_Verification_Procedure(item_list, discount_1, discount_2)
 
-    return [new_order_no, staff_number, alphabet, sub_total, total, hash_total, item_list]
+    return [new_order_no, staff_number, alphabet, sub_total, total, hash_total, numberOFItems, item_list, discount_1, discount_2]
+
+def invoice(order_list):
+    for order in order_list:
+        print("%-27s AI_Tone mall" % " ")
+        print("INVOICE")
+        print("%-30s %-30s  %-30s" % ("Invoice Date", "Order No.", "Mall Dollar"))
+        orderNo = order[0][0] + str(order[1]) + order[2] + order[0][-6:] + str(order[6]) + "(" + str(checkDigit(order[1], order[0], order[2])) + ")"
+        print("%-30s %-30s $%-30.1f" % (str(dt.date.today()), orderNo, mallDollar(order[4])))
+        print("%-42s %-20s %-10s" % ("Description", "Qty", "Total"))
+        print("Customer Number: " + "987654\n") # customerNo
+        for item in order[7]:
+            print("%-4s%-6s %-32s %-20s %-10s" % (item[0], ".", item[1], item[2], item[3]))
+        print()
+        print("%-40s %-25s  $ %-30s" % ("Shipping To", "SubTotal", order[3]))
+        print("%-40s %-25s -$ %-30s" % ("Customer Name: " + "ABC TONE", "VIP", order[8]))
+        print("%-40s %-25s -$ %-30.2s" % ("Customer Address: " + "ZZZZZZZ", "VIPDAY95", order[9]*order[3]))
+        delivery_fee = deliveryFee(order[3])
+        if deliveryFee(order[3]) == 0: 
+            print("%-40s %-25s  %-30s" % (" ", "Delivery Fee", "FREE"))
+        else:
+            print("%-40s %-25s  $ %-30s" % (" ", "Delivery Fee", str(delivery_fee)))
+        print("%-40s %-25s  $ %-30.2s" % (" ", "Total", order[4]))
+        print("\n")
+
 
 
 # output audited format file:
@@ -245,7 +272,7 @@ def audited_format_file(order_list):
             #print staff number
             f.write("Agency_number", order[1] )
             #print user 'modulus number'
-            f.write("Modulus_number", checkDigit(order[1], order[0], order[2])))
+            f.write("Modulus_number", checkDigit(order[1], order[0], order[2]))
             #print sub total
             f.write("Total" + str(order[3]))
             # print hash total
@@ -267,7 +294,9 @@ while True:
     except:
         print("Please enter a number.")
 for i in range(ordersNum):
-    print("Order " + str(i+1) + " input,\n")
+    for symbol in range(30):
+        print("-", end="")
+    print("\nOrder " + str(i+1) + " input,\n")
     order_list.append(order_input())
     print() # Empty line
 # output()
