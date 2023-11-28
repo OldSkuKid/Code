@@ -2,7 +2,7 @@ import datetime as dt
 import csv
 import random
 
-#1. Function 1, Check Digit
+# 1, Check Digit
 def checkDigit(staff_number,order_number,alphabet):
     if alphabet == 'A':
         modulus = 9
@@ -18,10 +18,7 @@ def checkDigit(staff_number,order_number,alphabet):
     for i in range(len(staff_number)):
         result += int(staff_number[i]) * int(order_number[i])
     return modulus - (result % modulus)
-# Testing, checkDigit()
-#print(checkDigit(123456,567878,'B'))
 
-# Function 2, Cost Verification Procedure (ask professor)
 def Cost_Verification_Procedure(items, discount_1, discount_2):
     sub_total = 0
     discount = 0
@@ -40,7 +37,7 @@ def Cost_Verification_Procedure(items, discount_1, discount_2):
 
     return sub_total - discount + delivery_fees
 
-# Function 3 Hash Total:
+# 3, Hash Total:
 # last two digital of the order number:
 def hashTotal(item_numbers):
     total = 0
@@ -57,7 +54,7 @@ while item_number != 'q' and len(item_numbers) <= 9:
     item_number = input("Input an item number (or 'q' to quit): ")
 print(hashTotal(item_numbers))
 
-# Function 4 mall dollar:
+# 5, mall dollar:
 def mallDollar(total):
     if total >= 1000:
         mall_dollar = total * 0.002
