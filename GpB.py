@@ -109,8 +109,7 @@ def customer_exists(customer_number):
                 return line
     return None
 
-# input for each order,
-def order_input():
+def order_no():
     # Determine the order number from the order file
     # First, get the last order number
     with open('OrderFile.csv', encoding="utf-8-sig") as orders:
@@ -130,7 +129,10 @@ def order_input():
     for zeroNum in range(6 - len(num_part)): # make sure 6 digit
         num_part = "0" + num_part
     new_order_no = alphabet + str("-") + num_part
-    
+    return new_order_no
+
+# input for each order,
+def order_input():
     # Input staff number
     while True:
         try:
@@ -268,7 +270,16 @@ def order_input():
     # order total payment
     total = Cost_Verification_Procedure(item_list, discount_1, discount_2)
 
-    return [new_order_no, staff_number, alphabet, sub_total, total, hash_total, numberOFItems, item_list, discount_1, discount_2,customer_info[0],customer_info[1],customer_info[2],modulus]
+    order = [order_no(), staff_number, alphabet, sub_total, total, hash_total, numberOFItems, item_list, discount_1, discount_2,customer_info[0],customer_info[1],customer_info[2],modulus]
+
+    modulus_number = str(checkDigit(order[1], order[0], order[2]))
+
+    # record the order in csv format
+    with open('OrderFile.csv', 'a', newline='') as customer:
+        csv_writer = csv.writer(customer)
+        csv_writer.writerow([order[0], order[1], modulus_number, order[4], order[5]])
+
+    return order
 
 def invoice(order_list):
     for order in order_list:
@@ -293,11 +304,6 @@ def invoice(order_list):
             print("%-40s %-25s  $ %-30.2s" % (" ", "Delivery Fee", str(delivery_fee)))
         print("%-40s %-25s  $ %-30.1f" % (" ", "Total", order[4]))
         print("\n")
-
-        # record the order in csv format
-        with open('OrderFile.csv', 'a', newline='') as customer:
-            csv_writer = csv.writer(customer)
-            csv_writer.writerow([order[0], order[1], modulus_number, order[4], order[5]])
 
 # 6, Output audit file
 def audited_format_file(order_list):
