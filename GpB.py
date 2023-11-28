@@ -15,6 +15,7 @@ def checkDigit(staff_number,order_number,alphabet):
 
 # 2, Input Alphabet
 def input_alphabet(alphabet):
+ # check if the alphabet is valid
     if alphabet == 'A':
         modulus = 9
     elif alphabet == 'B':
@@ -22,10 +23,10 @@ def input_alphabet(alphabet):
     elif alphabet == 'C':
         modulus = 7
     elif alphabet == 'D':
-        modulus = 6
+        modulus = 6    
     else:
-        print("Invalid alphabet. Enter again.")
-    return modulus
+        print("Invalid alphabet. Enter again.")  
+    return modulus 
     
 
 def cal_sub_total(items):
@@ -72,29 +73,41 @@ def mallDollar(total):
   
 # arbitrary assigned the customer name and address with condition statement within the function
 def name_address(customer_number):
+    customer_info = customer_exists(customer_number)
+    if customer_info != None:
+        customer_number = customer_info[0]
+        customer_name = customer_info[1]
+        customer_address = customer_info[2]
+        return [customer_number, customer_name, customer_address]
+    else:
+        #generate random a new customer number 6 digits, check if the cs number exist in the csv file
+        while True:
+            customer_number = random.randint(100000,999999)
+            if customer_exists(customer_number) == None:
+                print("-Cusomter Number not exist.")
+                print("-Plase Eneter Customer Name and Address")
+                #add new customer, save into the csv and genereate a new customer number to the customer
+                customer_name = input("Please enter the customer name: ")
+                customer_address = input("Please input enter customer address: ")
+                print("A New Customer Number Will be Assgined.")
+                break
+        #save into the csv
+        with open('CustomerAddress.csv', 'a', newline='') as customer:
+            csv_writer = csv.writer(customer)
+            csv_writer.writerow([customer_number, customer_name, customer_address])
+            print("-Customer Record Saved.")
+            # stop the loop and return the customer name and address
+            return [customer_number,customer_name, customer_address]
+        
+# check if the customer number exist in the csv file
+def customer_exists(customer_number):
     with open('CustomerAddress.csv', encoding="utf-8-sig") as customer:
         csv_reader = csv.reader(customer)
-        next(csv_reader) # skip the header
+        next(csv_reader)  # skip the header
         for line in csv_reader:
-            if int(line[0]) == customer_number:
-                customer_name = line[1]
-                customer_address = line[2]
-                return customer_number, customer_name, customer_address
-            else:
-                #add new customer, save into the csv and genereate a new customer number to the customer
-                customer_name = input("Please input the customer name: ")
-                customer_address = input("Please input the customer address: ")
-
-                #generate random a new customer number 6 digits
-                """ IT WILL POSSIBLE CAUSE TO DUPLICATE CUSTOMER NUMBER """
-                customer_number = random.randint(100000,999999)
-
-                #save into the csv
-                with open('CustomerAddress.csv', 'a', newline='') as customer:
-                    csv_writer = csv.writer(customer)
-                    csv_writer.writerow([customer_number, customer_name, customer_address])
-                    # stop the loop and return the customer name and address
-                    return customer_name, customer_address   
+            if line[0] == customer_number:
+                return line
+    return None
 
 # input for each order,
 def order_input():
@@ -130,7 +143,19 @@ def order_input():
             print("Please enter a number.")
             
     # modulus number
+
     alphabet = input("Enter alphabet(A, B, C, D): ")
+    if alphabet == 'A':
+        modulus = 9
+    elif alphabet == 'B':
+        modulus = 8
+    elif alphabet == 'C':
+        modulus = 7
+    elif alphabet == 'D':
+        modulus = 6
+    else:
+        print("Invalid alphabet. Enter again.")
+
 
     # Input numbers of items within the order 
     global ordersNum
@@ -188,7 +213,13 @@ def order_input():
                             print("Invalid number.")
                         else:
                             break
-                    item_list.append([line[0], line[1], quantity_number, quantity_number * float(line[2])])
+                    for item in item_list:
+                        if item[0] == line[0]:
+                            item[2] += quantity_number
+                            item[3] = item[2] * float(line[2])
+                            break
+                    else:
+                        item_list.append([line[0], line[1], quantity_number, quantity_number * float(line[2])])
                     isExist = True
                     break
             if not isExist:
@@ -218,6 +249,16 @@ def order_input():
             else: break
         except:
             print("Invalid amount of discount. Enter again.")
+            
+    while True:
+        try:
+            #call the name_address function to get the customer name and address
+            customer_number_input = input("Please enter the customer number: ")
+            customer_info = name_address(customer_number_input)
+            break
+        except:
+            print("Invalid customer number. Enter again.")
+            
 
     # hash total
     global hash_total_list
@@ -227,57 +268,56 @@ def order_input():
     # order total payment
     total = Cost_Verification_Procedure(item_list, discount_1, discount_2)
 
-    return [new_order_no, staff_number, alphabet, sub_total, total, hash_total, numberOFItems, item_list, discount_1, discount_2]
+    return [new_order_no, staff_number, alphabet, sub_total, total, hash_total, numberOFItems, item_list, discount_1, discount_2,customer_info[0],customer_info[1],customer_info[2],modulus]
 
 def invoice(order_list):
     for order in order_list:
         print("%-27s AI_Tone mall" % " ")
         print("INVOICE")
         print("%-30s %-30s  %-30s" % ("Invoice Date", "Order No.", "Mall Dollar"))
-        orderNo = order[0][0] + str(order[1]) + order[2] + order[0][-6:] + str(order[6]) + "(" + str(checkDigit(order[1], order[0], order[2])) + ")"
-        print("%-30s %-30s $%-30.1f" % (str(dt.date.today()), orderNo, mallDollar(order[4])))
+        orderNo = order[0][0] + str(order[1]) + str(order[2]) + order[0][-6:] + str(order[6]) + "(" + str(checkDigit(order[1], order[0], order[2])) + ")"
+        print("%-30s %-30s  $%-29.2f" % (str(dt.date.today()), orderNo, mallDollar(order[4])))
         print("%-42s %-20s %-10s" % ("Description", "Qty", "Total"))
-        print("Customer Number: " + "987654\n") # customerNo
+        print("Customer Number: " + str(order[10])) # customerNo
         for item in order[7]:
             print("%-4s%-6s %-32s %-20s %-10s" % (item[0], ".", item[1], item[2], item[3]))
         print()
-        print("%-40s %-25s  $ %-30s" % ("Shipping To", "SubTotal", order[3]))
-        print("%-40s %-25s -$ %-30s" % ("Customer Name: " + "ABC TONE", "VIP", order[8]))
-        print("%-40s %-25s -$ %-30.2s" % ("Customer Address: " + "ZZZZZZZ", "VIPDAY95", order[9]*order[3]))
+        print("%-40s %-25s  $ %-30.2f" % ("Shipping To", "SubTotal", order[3]))
+        print("%-40s %-25s -$ %-30.2f" % ("Customer Name: " +str(order[11]) , "VIP", order[8]))
+        print("%-40s %-25s -$ %-30.2f" % ("Customer Address: " + str(order[12]), "VIPDAY95", order[9]*order[3]))
         delivery_fee = deliveryFee(order[3])
         if deliveryFee(order[3]) == 0: 
-            print("%-40s %-25s  %-30s" % (" ", "Delivery Fee", "FREE"))
+            print("%-40s %-25s  %-30.2s" % (" ", "Delivery Fee", "FREE"))
         else:
-            print("%-40s %-25s  $ %-30s" % (" ", "Delivery Fee", str(delivery_fee)))
-        print("%-40s %-25s  $ %-30.2s" % (" ", "Total", order[4]))
+            print("%-40s %-25s  $ %-30.2s" % (" ", "Delivery Fee", str(delivery_fee)))
+        print("%-40s %-25s  $ %-30.1f" % (" ", "Total", order[4]))
         print("\n")
 
 
-
-# output audited format file:
+# 6, Output audit file
 def audited_format_file(order_list):
-    with open('last_order_file.txt', 'w') as f:
-    # write total number of orders
-        f.write("Number_of_orders", str(len(order_list)))
-    # write total hash of all orders
-        f.write("Hash_total_of_all_orders", str(sum(hash_total_list)))
-
+    with open('audited_file.txt', 'w') as f:
+        # write total number of orders
+        f.write("Number_of_orders: " + str(len(order_list)) + "\n")
+        # write total hash of all orders
+        f.write("Hash_total_of_all_orders: " + str(sum(hash_total_list)) + "\n")
+        f.write("\n")
         # loop each order in the order list
         i = 0
         for order in order_list:
             i += 1
-            f.write("Order", i, "details")
-            #print order number
-            f.write("Order_Number: " + order[0])
-            #print staff number
-            f.write("Agency_number", order[1] )
-            #print user 'modulus number'
-            f.write("Modulus_number", checkDigit(order[1], order[0], order[2]))
-            #print sub total
-            f.write("Total" + str(order[3]))
+            f.write("Order " + str(i) + " details\n")
+            # print order number
+            f.write("Order_Number: " + str(order[0] + "\n"))
+            # print staff number
+            f.write("Agency_number: " + str(order[1]) + "\n")
+            # print user 'modulus number'
+            f.write("Modulus_number: " + str(order[13]) + "\n")
+            # print sub total
+            f.write("Total: " + str(order[3]) + "\n")
             # print hash total
-            f.write("Hash_total" + str(order[5]))
-            f.write()
+            f.write("Hash_total: " + str(order[5]) + "\n")
+            f.write("\n")
 
 # main program
 global ordersNum
