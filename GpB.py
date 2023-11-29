@@ -304,16 +304,41 @@ def invoice(order_list):
             print("%-40s %-25s  $ %-30.2f" % (" ", "Delivery Fee", float(delivery_fee)))
         print("%-40s %-25s  $ %-30.2f" % (" ", "Total", float(order[4])))
         print("\n")
-            # Save as CSV
-        with open("sampleInvoice.csv", mode="w", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(["Invoice Date", "Order No.", "Mall Dollar", "Qty", "Total", "Shipping To", "SubTotal", "VIP", "VIPDAY95", "Delivery Fee", "Total"])
+
+        # Save as txt
+        with open('sampleInvoice.txt', 'w') as f:
             for order in order_list:
-                orderNo = order[0][0] + str(order[1]) + str(order[2]) + order[0][-6:] + str(order[6]) + "(" + str(checkDigit(order[1], order[0], order[2])) + ")"
-                writer.writerow([
-                    str(dt.date.today()), orderNo, float(mallDollar(order[4])),
-                     ,float(order[4])
-                ])
+                f.write("%-27s AI_Tone mall" % " ")
+                f.write("\n")
+                f.write("INVOICE")
+                f.write("\n")
+                f.write("%-30s %-30s  %-30s" % ("Invoice Date", "Order No.", "Mall Dollar"))
+                f.write("\n")
+                orderNo = order[0][0] + str(order[1]) + str(order[2]) + order[0][-6:] + str(order[6]) + "(" + modulus_number + ")"
+                f.write("%-30s %-30s  $%-29.2f" % (str(dt.date.today()), orderNo, float(mallDollar(order[4]))))
+                f.write("\n")
+                f.write("%-42s %-20s %-10s" % ("Description", "Qty", "Total"))
+                f.write("\n")
+                f.write("Customer Number: " + str(order[10])) # customerNo
+                f.write("\n")
+                for item in order[7]:
+                    f.write("%-4s%-6s %-32s %-20s %-10.2f" % (item[0], ".", item[1], item[2], float(item[3])))
+                    f.write("\n")
+                f.write("\n")
+                f.write("%-40s %-25s  $ %-30.2f" % ("Shipping To", "SubTotal", float(order[3])))
+                f.write("\n")
+                f.write("%-40s %-25s -$ %-30.2f" % ("Customer Name: " +str(order[11]) , "VIP", float(order[8])))
+                f.write("\n")
+                f.write("%-40s %-25s -$ %-30.2f" % ("Customer Address: " + str(order[12]), "VIPDAY95", float(order[9]*order[3])))
+                f.write("\n")
+                delivery_fee = deliveryFee(order[3])
+                if deliveryFee(order[3]) == 0: 
+                    f.write("%-40s %-25s  %-30s" % (" ", "Delivery Fee", "FREE"))
+                else:
+                    f.write("%-40s %-25s  $ %-30.2f" % (" ", "Delivery Fee", float(delivery_fee)))
+                f.write("\n")
+                f.write("%-40s %-25s  $ %-30.2f" % (" ", "Total", float(order[4])))
+                f.write("\n")
 
 # 6, Output audit file
 def audited_format_file(order_list):
