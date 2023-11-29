@@ -1,0 +1,13 @@
+                            AI_Tone mall
+INVOICE
+Invoice Date                   Order No.                       Mall Dollar                   
+2023-11-29                     A123456A0000281(5)              $0.00                         
+Description                                Qty                  Total     
+Customer Number: 135791
+1004.      Product 4                        2                    26.00     
+
+Shipping To                              SubTotal                   $ 26.00                         
+Customer Name: AI_Wong                   VIP                       -$ 0.00                          
+Customer Address: ABCDEF                 VIPDAY95                  -$ 0.00                          
+                                         Delivery Fee               $ 50.00                         
+                                         Total                      $ 76.00                         
